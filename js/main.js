@@ -124,28 +124,27 @@ function renderHeader() {
 
   return `
     <header class="site-header" id="siteHeader">
-      <div class="container header-shell">
-        <a href="index.html" class="header-logo" aria-label="Accueil ETCBC">
+      <div class="header-layout">
+        <a href="index.html" class="site-logo" aria-label="Accueil ETCBC">
           <img src="${SITE.logo}" alt="${SITE.fullName}" onerror="this.onerror=null;this.src='${SITE.logoFallback}'">
         </a>
-        <div class="header-top">
-          <div class="topbar-partner">
-            <img src="${SITE.partnerLogo}" alt="Combles d'en France — Entreprise Partenaire" width="120" height="50">
-          </div>
-          <div class="topbar-actions">
-            <a href="contact.html" class="btn btn-primary btn-sm">Nous Contacter</a>
-            <a href="${SITE.phoneLink}" class="topbar-icon" aria-label="Appeler ${SITE.phone}">&#9742;</a>
-            <a href="${SITE.googleMaps}" target="_blank" rel="noopener" class="topbar-icon" aria-label="Google Maps">&#128205;</a>
+        <div class="header-aside">
+          <div class="header-content">
+            <div class="header-top">
+              <a href="${SITE.phoneLink}" class="header-phone" aria-label="Appeler ${SITE.phone}">
+                <svg class="header-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+                <span>${SITE.phone}</span>
+              </a>
+              <a href="contact.html" class="btn btn-primary header-cta">Devis gratuit</a>
+            </div>
+            <nav class="header-nav" id="navbar" aria-label="Navigation principale">
+              <div class="nav-links" id="navLinks">${navLinks}</div>
+              <button class="nav-toggle" id="navToggle" aria-label="Ouvrir le menu" aria-expanded="false">
+                <span></span><span></span><span></span>
+              </button>
+            </nav>
           </div>
         </div>
-        <nav class="navbar" id="navbar">
-          <div class="nav-inner">
-            <button class="nav-toggle" id="navToggle" aria-label="Menu">
-              <span></span><span></span><span></span>
-            </button>
-            <div class="nav-links" id="navLinks">${navLinks}</div>
-          </div>
-        </nav>
       </div>
       <div class="nav-overlay" id="navOverlay"></div>
     </header>
@@ -275,6 +274,8 @@ function initNavigation() {
     toggle.classList.remove('open');
     links.classList.remove('open');
     overlay.classList.remove('open');
+    toggle.setAttribute('aria-expanded', 'false');
+    toggle.setAttribute('aria-label', 'Ouvrir le menu');
     document.body.style.overflow = '';
   }
 
@@ -282,6 +283,8 @@ function initNavigation() {
     const isOpen = links.classList.toggle('open');
     toggle.classList.toggle('open', isOpen);
     overlay.classList.toggle('open', isOpen);
+    toggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+    toggle.setAttribute('aria-label', isOpen ? 'Fermer le menu' : 'Ouvrir le menu');
     document.body.style.overflow = isOpen ? 'hidden' : '';
   });
 
