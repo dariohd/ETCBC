@@ -17,6 +17,8 @@ const SITE = {
   logo: 'images/logo.png',
   logoFallback: 'images/logo.webp',
   partnerLogo: 'https://local-fr-public.s3.eu-west-3.amazonaws.com/prod/webtool/userfiles/137031/refonte/logo%20comblesdenfrance.png',
+  /** FormSubmit : envoi via bulletonsite@gmail.com (activé) + copie client */
+  formEndpoint: 'https://formsubmit.co/ajax/bulletonsite@gmail.com',
 };
 
 const NAV_ITEMS = [
@@ -459,7 +461,7 @@ function initContactForm() {
     }
 
     try {
-      const res = await fetch(`https://formsubmit.co/ajax/${encodeURIComponent(SITE.email)}`, {
+      const res = await fetch(SITE.formEndpoint, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
         body: JSON.stringify({
@@ -469,14 +471,17 @@ function initContactForm() {
           Téléphone: telephone || '—',
           Service: service || 'Non précisé',
           Message: message,
-          _subject: `Demande de contact ETCBC — ${prenom} ${nom}`,
+          _subject: `[ETCBC] Demande de contact — ${prenom} ${nom}`,
           _replyto: email,
+          _cc: SITE.email,
           _captcha: 'false',
           _template: 'table',
         }),
       });
 
-      if (!res.ok) throw new Error('submit failed');
+      const data = await res.json().catch(() => ({}));
+      const ok = res.ok && (data.success === true || data.success === 'true');
+      if (!ok) throw new Error(data.message || 'submit failed');
 
       form.reset();
       btn.textContent = 'Message envoyé !';
