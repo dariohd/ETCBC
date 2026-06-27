@@ -22,6 +22,7 @@ const SITE = {
 const NAV_ITEMS = [
   { href: 'index.html', label: 'Accueil' },
   { href: 'charpente.html', label: 'Charpente' },
+  { href: 'amenagement-combles.html', label: 'Combles' },
   { href: 'construction-bois.html', label: 'Construction bois' },
   { href: 'couverture.html', label: 'Couverture' },
   { href: 'menuiseries.html', label: 'Menuiseries' },
@@ -38,6 +39,15 @@ const DOMAINS = [
     intro: 'Fabrication, pose, rénovation et modification de charpentes pour le neuf comme la rénovation.',
     skills: ['Charpentes traditionnelles', 'Fermettes & lamellé-collé', 'Carports, hauts-vents & terrasses', 'Aménagement de combles'],
     cta: 'Découvrir la charpente',
+  },
+  {
+    id: 'amenagement-combles',
+    title: 'Aménagement de combles',
+    href: 'amenagement-combles.html',
+    image: 'images/gallery/realisation-11.webp',
+    intro: 'Transformation de combles en espaces habitables, en partenariat avec Combles d\'en France.',
+    skills: ['Étude de faisabilité', 'Renforcement de charpente', 'Poutre espace', 'Fermettes & combles perdus'],
+    cta: 'Découvrir l\'aménagement de combles',
   },
   {
     id: 'construction-bois',
@@ -161,7 +171,7 @@ function renderFooter() {
           <div class="footer-brand">
             <img src="${SITE.logo}" alt="${SITE.name}" width="80" height="92" onerror="this.onerror=null;this.src='${SITE.logoFallback}'">
             <p><strong>${SITE.fullName}</strong><br>${SITE.owner}<br>SIRET : ${SITE.siret}</p>
-            <p style="margin-top:0.75rem">Charpente · Construction bois · Couverture · Menuiseries<br>${SITE.address} — ${SITE.city}</p>
+            <p style="margin-top:0.75rem">Charpente · Combles · Construction bois · Couverture · Menuiseries<br>${SITE.address} — ${SITE.city}</p>
           </div>
           <div class="footer-links">
             <h4>Services</h4>
