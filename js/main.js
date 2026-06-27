@@ -192,7 +192,7 @@ function renderFooter() {
         </div>
         <div class="footer-bottom">
           <span>&copy; ${new Date().getFullYear()} ${SITE.name} — ${SITE.fullName}</span>
-          <a href="contact.html">Législation &amp; RGPD</a>
+          <a href="mentions-legales.html">Mentions légales &amp; confidentialité</a>
         </div>
       </div>
     </footer>
@@ -429,19 +429,77 @@ function initContactForm() {
   const form = document.getElementById('contactForm');
   if (!form) return;
 
-  form.addEventListener('submit', (e) => {
+  form.addEventListener('submit', async (e) => {
     e.preventDefault();
+    if (!form.checkValidity()) {
+      form.reportValidity();
+      return;
+    }
+
     const btn = form.querySelector('button[type="submit"]');
+    const status = document.getElementById('contactFormStatus');
     const originalText = btn.textContent;
-    btn.textContent = 'Message envoyé !';
+    const fd = new FormData(form);
+
+    if (fd.get('_gotcha')) return;
+
+    const nom = String(fd.get('nom') || '').trim();
+    const prenom = String(fd.get('prenom') || '').trim();
+    const email = String(fd.get('email') || '').trim();
+    const telephone = String(fd.get('telephone') || '').trim();
+    const service = String(fd.get('service') || '').trim();
+    const message = String(fd.get('message') || '').trim();
+
     btn.disabled = true;
-    btn.style.background = 'var(--secondary)';
-    setTimeout(() => {
+    btn.textContent = 'Envoi en cours…';
+    if (status) {
+      status.hidden = false;
+      status.classList.remove('form-status--error');
+      status.textContent = 'Envoi de votre message…';
+    }
+
+    try {
+      const res = await fetch(`https://formsubmit.co/ajax/${encodeURIComponent(SITE.email)}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+        body: JSON.stringify({
+          Nom: nom,
+          Prénom: prenom,
+          Email: email,
+          Téléphone: telephone || '—',
+          Service: service || 'Non précisé',
+          Message: message,
+          _subject: `Demande de contact ETCBC — ${prenom} ${nom}`,
+          _replyto: email,
+          _captcha: 'false',
+          _template: 'table',
+        }),
+      });
+
+      if (!res.ok) throw new Error('submit failed');
+
+      form.reset();
+      btn.textContent = 'Message envoyé !';
+      btn.style.background = 'var(--secondary)';
+      if (status) {
+        status.textContent =
+          'Message envoyé. Nous vous répondons sous 48 h ouvrées. Pensez à vérifier vos spams.';
+      }
+
+      setTimeout(() => {
+        btn.textContent = originalText;
+        btn.disabled = false;
+        btn.style.background = '';
+        if (status) status.hidden = true;
+      }, 8000);
+    } catch {
       btn.textContent = originalText;
       btn.disabled = false;
-      btn.style.background = '';
-      form.reset();
-    }, 3000);
+      if (status) {
+        status.classList.add('form-status--error');
+        status.textContent = `Envoi impossible pour le moment. Appelez le ${SITE.phone} ou écrivez à ${SITE.email}.`;
+      }
+    }
   });
 }
 

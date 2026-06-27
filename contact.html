@@ -89,6 +89,7 @@
             <h3>Formulaire de contact</h3>
             <p style="color:var(--text-muted);margin-bottom:1.5rem;font-size:0.95rem">Vous avez des questions ou des besoins particuliers ? Laissez-nous un message. Nous vous répondrons rapidement.</p>
             <form id="contactForm">
+              <input type="text" name="_gotcha" tabindex="-1" autocomplete="off" class="form-honeypot" aria-hidden="true">
               <div class="form-row">
                 <div class="form-group">
                   <label for="nom">Nom *</label>
@@ -126,6 +127,7 @@
                 <textarea id="message" name="message" required placeholder="Décrivez votre projet..."></textarea>
               </div>
               <button type="submit" class="btn btn-secondary" style="width:100%">Envoyer ma demande</button>
+              <p id="contactFormStatus" class="form-status" hidden role="status"></p>
             </form>
           </div>
         </div>
