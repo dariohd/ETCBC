@@ -38,6 +38,12 @@
       ]
     }
   ],
+  "rewrites": [
+    {
+      "source": "/api/bulle/:path*",
+      "destination": "https://bulle-chatbot.vercel.app/api/:path*"
+    }
+  ],
   "redirects": [
     {
       "source": "/index.html",
