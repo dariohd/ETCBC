@@ -1,2 +1,4 @@
 node_modules/
 temp-preview/
+.vercel
+.env*
